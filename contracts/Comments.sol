@@ -11,14 +11,20 @@ contract Comments {
         address addr;
         string title;
         string desc;
+        mapping(address => Comment) comments;
     }
 
-    Item[] items;
-    mapping(address => Comment) comments;
+    mapping (address => Item) items;
 
     function addItem(string title, string desc) public returns (address) {
         var i = Item(msg.sender, title, desc);
-        items.push(i);
+        items[i.addr] = i;
         return i.addr;
+    }
+
+    function addComment(string comment, bool good, address item) public returns (address) {
+        var c = Comment(msg.sender, item, good, comment);
+        items[item].comments[c.addr] = c;
+        return c.addr;
     }
 }
